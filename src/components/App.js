@@ -1,38 +1,39 @@
-import "../index.css";
-import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import '../index.css';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-import Header from "./Header";
-import Main from "./Main";
-import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
-import ImagePopup from "./ImagePopup";
+import Header from './Header';
+import Main from './Main';
+import Footer from './Footer';
+import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
 
-import React, {useEffect} from "react";
-import api from "../utils/api";
-import {EditProfilePopup} from "./EditProfilePopup";
-import {EditAvatarPopup} from "./EditAvatarPopup";
-import {AddPlacePopup} from "./AddPlacePopup";
+import React, { useEffect } from 'react';
+import api from '../utils/api';
+import { EditProfilePopup } from './EditProfilePopup';
+import { EditAvatarPopup } from './EditAvatarPopup';
+import { AddPlacePopup } from './AddPlacePopup';
 
 function App() {
-	const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-		React.useState(false);
-	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-		React.useState(false);
-	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-	const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
-		React.useState(false);
-	const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-	const [selectedCardData, setSelectedCardData] = React.useState({});
-	const [cardList, setCardList] = React.useState([]);
-	const [currentUser, setCurrentUser] = React.useState({});
-	
-	useEffect(() => {
-		api
-			.getUserInfo()
-			.then((userData) => {
-				setCurrentUser(userData);
-			})
-			.catch((err) => console.log(`Error.....: (getUserInfo) ${err}`));
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
+    React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
+    React.useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  
+  const [selectedCardData, setSelectedCardData] = React.useState({});
+  const [cardList, setCardList] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState({});
+  
+  useEffect(() => {
+    api
+      .getUserInfo()
+      .then((userData) => {
+        setCurrentUser(userData);
+      })
+      .catch((err) => console.log(`Error.....: (getUserInfo) ${err}`));
 	}, []);
 	
 	useEffect(() => {
