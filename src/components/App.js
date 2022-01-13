@@ -20,10 +20,11 @@ function App() {
   const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
     React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-
+  
   const [selectedCardData, setSelectedCardData] = React.useState({});
   const [cardList, setCardList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
   
   useEffect(() => {
     api
@@ -33,7 +34,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (getUserInfo) ${err}`));
   }, []);
-  
+
   useEffect(() => {
     api
       .getInitialCards()
@@ -42,7 +43,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (getInitialCards) ${err}`));
   }, []);
-  
+
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     if (!isLiked) {
@@ -65,7 +66,7 @@ function App() {
         .catch((err) => console.log(`Error.....: (removeLikes) ${err}`));
     }
   }
-  
+
   function handleDeleteCard(card) {
     api
       .deleteCard(card._id)
@@ -160,7 +161,7 @@ function App() {
         handleCardLike={handleCardLike}
         handleDeleteCard={handleDeleteCard}
       />
-      
+  
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         closeAllPopups={closeAllPopups}
