@@ -7,13 +7,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Layout from './components/Layout';
+import { RequireAuth } from './utils/useAuth';
 
 render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path='/' element={<App />} />
+          <Route element={<RequireAuth />}>
+            <Route path='/' element={<App />} />
+          </Route>
           <Route path='signup' element={<Register />} />
           <Route path='signin' element={<Login />} />
           <Route

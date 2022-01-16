@@ -24,7 +24,7 @@ function App() {
   const [selectedCardData, setSelectedCardData] = React.useState({});
   const [cardList, setCardList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  
   
   useEffect(() => {
     api

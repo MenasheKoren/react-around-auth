@@ -3,7 +3,7 @@ export const register = (username, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ username, password, email })
@@ -37,4 +37,3 @@ export const authorize = (email, password) => {
     })
     .catch((err) => console.log(err));
 };
-

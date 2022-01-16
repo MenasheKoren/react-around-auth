@@ -1,7 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
+import useAuth from '../utils/useAuth';
+
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  
+  const handleLogin = () => {
+    login().then(() => {
+      navigate('/');
+    })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   return (
     <section className={`entry entry_type_login`}>
       <h2 className='entry__title'>Log in</h2>
@@ -27,6 +40,7 @@ export default function Login() {
         <button className='entry__save button  button_hover_dark' type='submit'>
           Log in
         </button>
+        <button onClick={handleLogin}>TEST log in</button>
       </form>
       <Link to='/signup' className='link entry__redirect'>
         Not a member yet? Sign up here!
