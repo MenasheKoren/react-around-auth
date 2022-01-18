@@ -1,3 +1,30 @@
+import React from 'react';
+
+export function useAuth() {
+  const [isAuthed, setIsAuthed] = React.useState(true);
+  
+  return {
+    isAuthed,
+    login() {
+      return new Promise((res) => {
+        setIsAuthed(true);
+        res();
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    logout() {
+      return new Promise((res) => {
+        setIsAuthed(false);
+        res();
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  };
+}
+
+
 const BASE_URL = 'https://register.nomoreparties.co';
 export const register = (username, email, password) => {
   return fetch(`${BASE_URL}/signup`, {

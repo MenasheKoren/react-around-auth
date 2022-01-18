@@ -1,19 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
-import useAuth from '../utils/useAuth';
-
+import { useAuth } from '../utils/auth';
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
   
-  const handleLogin = () => {
+  const handleSubmitLogin = (e) => {
+    e.preventDefault();
     login().then(() => {
       navigate('/');
-    })
-      .catch(err => {
-        console.log(err);
-      });
+    });
   };
   return (
     <section className={`entry entry_type_login`}>
@@ -37,10 +34,13 @@ export default function Login() {
           required
         />
         <span className='error-message' id='password-input-error' />
-        <button className='entry__save button  button_hover_dark' type='submit'>
+        <button
+          onSubmit={handleSubmitLogin}
+          className='entry__save button  button_hover_dark'
+          type='submit'
+        >
           Log in
         </button>
-        <button onClick={handleLogin}>TEST log in</button>
       </form>
       <Link to='/signup' className='link entry__redirect'>
         Not a member yet? Sign up here!

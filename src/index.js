@@ -6,15 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
-import { RequireAuth } from './utils/useAuth';
 
 render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route element={<RequireAuth />}>
+          <Route element={<ProtectedRoute />}>
             <Route path='/' element={<App />} />
           </Route>
           <Route path='signup' element={<Register />} />
@@ -23,7 +23,7 @@ render(
             path='*'
             element={
               <main style={{ padding: '1rem' }}>
-                <p>There's nothing here!</p>
+                <h1>Error 404: There's nothing here!</h1>
               </main>
             }
           />

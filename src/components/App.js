@@ -20,12 +20,12 @@ function App() {
   const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
     React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  
+
   const [selectedCardData, setSelectedCardData] = React.useState({});
   const [cardList, setCardList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
   
-  
+
   useEffect(() => {
     api
       .getUserInfo()
@@ -76,7 +76,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (handleDeleteCard) ${err}`));
   }
-  
+
   function handleCardClick({ link, name }) {
     setIsImagePopupOpen(true);
     setSelectedCardData({
