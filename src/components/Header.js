@@ -1,30 +1,35 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../images/logo.svg';
 import { useAuth } from '../utils/auth';
+import App from './App';
 
 export default function Header() {
-  const { isAuthed, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout()
-      .then(() => {
-        navigate('signin');
-      });
-  };
+  const location = useLocation();
+  const { isAuthed } = useAuth();
+  
+  const { handleLogout } = App;
   return (
     <header className='header'>
-      <img src={logo} alt='Around the U.S. logo' className='header__logo' />
-    
+      {/*<img src={logo} alt="Around the U.S. logo" className="header__logo" />*/}
+      <Link to='/' className='link'>
+        <img src={logo} alt='Around the U.S. logo' className='header__logo' />
+      </Link>
+      
       {isAuthed && (
-        <button onClick={handleLogout} className='button'>
+        <Link to='signin' onClick={handleLogout} replace className='link'>
           Log out
-        </button>
+        </Link>
       )}
-      {!isAuthed && (
+      
+      {location.pathname === 'signin' && (
+        <Link className='link' to='signup'>
+          Sign up
+        </Link>
+      )}
+      {location.pathname === 'signup' && (
         <Link className='link' to='signin'>
-          Sign in
+          Log in
         </Link>
       )}
     </header>

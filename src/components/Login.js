@@ -1,17 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React from 'react';
-import { useAuth } from '../utils/auth';
+import App from './App';
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  
-  const handleSubmitLogin = (e) => {
-    e.preventDefault();
-    login().then(() => {
-      navigate('/');
-    });
-  };
+  const { handleSubmitLogin, handleLoginTest } = App;
   return (
     <section className={`entry entry_type_login`}>
       <h2 className='entry__title'>Log in</h2>
@@ -45,6 +37,7 @@ export default function Login() {
       <Link to='/signup' className='link entry__redirect'>
         Not a member yet? Sign up here!
       </Link>
+      <button onClick={handleLoginTest}>Test Log in</button>
     </section>
   );
 }

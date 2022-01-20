@@ -1,7 +1,10 @@
 import React from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+
+const BASE_URL = 'https://register.nomoreparties.co';
 
 export function useAuth() {
-  const [isAuthed, setIsAuthed] = React.useState(true);
+  const [isAuthed, setIsAuthed] = React.useState(false);
   
   return {
     isAuthed,
@@ -24,8 +27,18 @@ export function useAuth() {
   };
 }
 
+export function AuthProvider({ children }) {
+  const isAuthed = useAuth();
+  
+  return (
+    <AuthContext.Provider value={isAuthed}>{children}</AuthContext.Provider>
+  );
+}
 
-const BASE_URL = 'https://register.nomoreparties.co';
+export default function AuthConsumer() {
+  return React.useContext(AuthContext);
+}
+
 export const register = (username, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
