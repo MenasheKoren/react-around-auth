@@ -1,20 +1,13 @@
-import Header from './Header';
-import Footer from './Footer';
-import { Outlet } from 'react-router-dom';
-import App from './App';
+import { Outlet } from "react-router-dom";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function Layout() {
-  const { handleLogout, handleSubmitLogin, handleLoginTest } = App;
   return (
-    <div className='page'>
-      <div className='content'>
-        <Header
-          handleLogout={handleLogout}
-        />
-        <Outlet
-          handleLoginTest={handleLoginTest}
-          handleSubmitLogin={handleSubmitLogin}
-        />
+    <div className="page">
+      <div className="content">
+        <Header />
+        <Outlet />
         <Footer />
       </div>
     </div>

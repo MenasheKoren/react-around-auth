@@ -1,25 +1,23 @@
-import '../index.css';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import React, { useEffect } from 'react';
-import api from '../utils/api';
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import "../index.css";
+import api from "../utils/api";
+import { AuthProvider } from "../utils/authProvider";
+import { AddPlacePopup } from "./AddPlacePopup";
+import { EditAvatarPopup } from "./EditAvatarPopup";
 
-import Main from './Main';
-import PopupWithForm from './PopupWithForm';
-import ImagePopup from './ImagePopup';
+import { EditProfilePopup } from "./EditProfilePopup";
+import ImagePopup from "./ImagePopup";
+import Layout from "./Layout";
+import Login from "./Login";
 
-import { EditProfilePopup } from './EditProfilePopup';
-import { EditAvatarPopup } from './EditAvatarPopup';
-import { AddPlacePopup } from './AddPlacePopup';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Layout from './Layout';
-import { useAuth } from '../utils/auth';
-import { ProtectedRoute } from './ProtectedRoute';
-import Login from './Login';
-import Register from './Register';
+import Main from "./Main";
+import PopupWithForm from "./PopupWithForm";
+import { ProtectedRoute } from "./ProtectedRoute";
+import Register from "./Register";
 
 function App() {
-  const navigate = useNavigate();
-  const { login, logout } = useAuth();
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -28,7 +26,7 @@ function App() {
   const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
     React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  
+
   const [selectedCardData, setSelectedCardData] = React.useState({});
   const [cardList, setCardList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState({});
@@ -41,7 +39,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (getUserInfo) ${err}`));
   }, []);
-  
+
   useEffect(() => {
     api
       .getInitialCards()
@@ -50,38 +48,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (getInitialCards) ${err}`));
   }, []);
-  
-  function handleLogout() {
-    logout()
-      .then(() => {
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  
-  const handleSubmitLogin = (e) => {
-    e.preventDefault();
-    login()
-      .then(() => {
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  
-  const handleLoginTest = () => {
-    login()
-      .then(() => {
-        navigate(`/`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  
+
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     if (!isLiked) {
@@ -119,7 +86,7 @@ function App() {
     setIsImagePopupOpen(true);
     setSelectedCardData({
       title: name,
-      link: link
+      link: link,
     });
   }
 
@@ -135,7 +102,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
   }
-  
+
   function handleAddPlaceSubmit(data) {
     const { title, link } = data;
     api
@@ -148,7 +115,7 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (handleAddPlaceSubmit) ${err}`));
   }
-  
+
   function handleUpdateAvatar(data) {
     const avatar = data.avatar.valueOf();
     api
@@ -161,23 +128,23 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
   }
-  
+
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
-  
+
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
-  
+
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
   }
-  
+
   function handleDeletePlaceClick() {
     setIsDeletePlacePopupOpen(true);
   }
-  
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
@@ -186,77 +153,70 @@ function App() {
     setIsImagePopupOpen(false);
     setSelectedCardData({});
   }
-  
+
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <Layout
-              handleLoginTest={handleLoginTest}
-              handleSubmitLogin={handleSubmitLogin}
-              handleLogout={handleLogout}
+    <AuthProvider>
+      <CurrentUserContext.Provider value={currentUser}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Main
+                    onEditAvatarClick={handleEditAvatarClick}
+                    onEditProfileClick={handleEditProfileClick}
+                    onAddPlaceClick={handleAddPlaceClick}
+                    handleCardClick={handleCardClick}
+                    onDeletePlaceClick={handleDeletePlaceClick}
+                    cardList={cardList}
+                    handleCardLike={handleCardLike}
+                    handleDeleteCard={handleDeleteCard}
+                  />
+                  <EditAvatarPopup
+                    isOpen={isEditAvatarPopupOpen}
+                    closeAllPopups={closeAllPopups}
+                    onUpdateAvatar={handleUpdateAvatar}
+                  />
+                  <EditProfilePopup
+                    isOpen={isEditProfilePopupOpen}
+                    closeAllPopups={closeAllPopups}
+                    onUpdateUser={handleUpdateUser}
+                  />
+                  <AddPlacePopup
+                    isOpen={isAddPlacePopupOpen}
+                    closeAllPopups={closeAllPopups}
+                    onUpdateAddPlace={handleAddPlaceSubmit}
+                  />
+                  <PopupWithForm
+                    name="remove-card"
+                    title="Are you sure?"
+                    buttonText="Yes"
+                    isOpen={isDeletePlacePopupOpen}
+                    closeAllPopups={closeAllPopups}
+                  />
+                  <ImagePopup
+                    closeAllPopups={closeAllPopups}
+                    selectedCardData={selectedCardData}
+                    isOpen={isImagePopupOpen}
+                  />
+                </ProtectedRoute>
+              }
             />
-          }
-        >
-          <Route
-            element={
-              <ProtectedRoute>
-                <Main
-                  onEditAvatarClick={handleEditAvatarClick}
-                  onEditProfileClick={handleEditProfileClick}
-                  onAddPlaceClick={handleAddPlaceClick}
-                  handleCardClick={handleCardClick}
-                  onDeletePlaceClick={handleDeletePlaceClick}
-                  cardList={cardList}
-                  handleCardLike={handleCardLike}
-                  handleDeleteCard={handleDeleteCard}
-                />
-                <EditAvatarPopup
-                  isOpen={isEditAvatarPopupOpen}
-                  closeAllPopups={closeAllPopups}
-                  onUpdateAvatar={handleUpdateAvatar}
-                />
-                <EditProfilePopup
-                  isOpen={isEditProfilePopupOpen}
-                  closeAllPopups={closeAllPopups}
-                  onUpdateUser={handleUpdateUser}
-                />
-                <AddPlacePopup
-                  isOpen={isAddPlacePopupOpen}
-                  closeAllPopups={closeAllPopups}
-                  onUpdateAddPlace={handleAddPlaceSubmit}
-                />
-                <PopupWithForm
-                  name='remove-card'
-                  title='Are you sure?'
-                  buttonText='Yes'
-                  isOpen={isDeletePlacePopupOpen}
-                  closeAllPopups={closeAllPopups}
-                />
-                <ImagePopup
-                  closeAllPopups={closeAllPopups}
-                  selectedCardData={selectedCardData}
-                  isOpen={isImagePopupOpen}
-                />
-              </ProtectedRoute>
-            }
-          />
-        
-          <Route path='signup' element={<Register />} />
-          <Route path='signin' element={<Login />} />
-          <Route
-            path='*'
-            element={
-              <main style={{ padding: '1rem' }}>
-                <h1>Error 404: There's nothing here!</h1>
-              </main>
-            }
-          />
-        </Route>
-      </Routes>
-    </CurrentUserContext.Provider>
+            <Route path="signup" element={<Register />} />
+            <Route path="signin" element={<Login />} />
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <h1>Error 404: There's nothing here!</h1>
+                </main>
+              }
+            />
+          </Route>
+        </Routes>
+      </CurrentUserContext.Provider>
+    </AuthProvider>
   );
 }
 
