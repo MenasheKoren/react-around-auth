@@ -1,0 +1,58 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import fail from "../images/fail.png";
+import success from "../images/success.png";
+import { useAuth } from "../utils/useAuth";
+
+export const InfoToolTip = (props) => {
+  const { isAuthed } = useAuth();
+  const navigate = useNavigate();
+  function handleCloseSuccessPopup() {
+    navigate("/", { replace: true });
+  }
+  return (
+    <section
+      className={[
+        "popup popup_type_info-tool-tip",
+        props.isOpen ? "popup_opened" : "",
+      ].join(" ")}
+    >
+      <div className="popup__container popup__container_type_info-tool-tip">
+        {isAuthed && (
+          <>
+            <button
+              className="popup__close button button_hover_dark"
+              type="button"
+              onClick={handleCloseSuccessPopup}
+            />
+            <img
+              src={success}
+              alt="Success checkmark"
+              className="info-tool-tip__image"
+            />
+            <h2 className="popup__title info-tool-tip__title">
+              Success! You have now been registered.
+            </h2>
+          </>
+        )}
+        {!isAuthed && (
+          <>
+            <button
+              className="popup__close  button button_hover_dark"
+              type="button"
+              onClick={props.closeAllPopups}
+            />
+            <img
+              src={fail}
+              alt="X for failure to register"
+              className="info-tool-tip__image"
+            />
+            <h2 className="popup__title info-tool-tip__title">
+              Oops, something went wrong! Please try again.
+            </h2>
+          </>
+        )}
+      </div>
+    </section>
+  );
+};

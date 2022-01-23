@@ -3,12 +3,14 @@ import { Route, Routes } from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import "../index.css";
 import api from "../utils/api";
+
 import { AuthProvider } from "../utils/authProvider";
 import { AddPlacePopup } from "./AddPlacePopup";
 import { EditAvatarPopup } from "./EditAvatarPopup";
 
 import { EditProfilePopup } from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
+import { InfoToolTip } from "./InfoToolTip";
 import Layout from "./Layout";
 import Login from "./Login";
 
@@ -18,6 +20,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import Register from "./Register";
 
 function App() {
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -129,6 +132,9 @@ function App() {
       .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
   }
 
+  function handleRegisterSubmitInfoToolTip() {
+    setIsPopupOpen(true);
+  }
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -152,6 +158,7 @@ function App() {
     setIsDeletePlacePopupOpen(false);
     setIsImagePopupOpen(false);
     setSelectedCardData({});
+    setIsPopupOpen(false);
   }
 
   return (
@@ -203,8 +210,24 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="signup" element={<Register />} />
-            <Route path="signin" element={<Login />} />
+            <Route
+              path="signup"
+              element={
+                <>
+                  <Register
+                    handleRegisterSubmitInfoToolTip={
+                      handleRegisterSubmitInfoToolTip
+                    }
+                  />
+                  <InfoToolTip
+                    isOpen={isPopupOpen}
+                    closeAllPopups={closeAllPopups}
+                  />
+                </>
+              }
+            />
+
+            <Route path=" signin" element={<Login />} />
             <Route
               path="*"
               element={
