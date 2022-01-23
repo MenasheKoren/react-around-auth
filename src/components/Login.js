@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
 export default function Login({ handleSubmitInfoToolTip }) {
@@ -13,15 +14,19 @@ export default function Login({ handleSubmitInfoToolTip }) {
     e.preventDefault();
     if (!email || !password) {
       handleSubmitInfoToolTip();
-    } else {
-      login()
-        .then(() => {
-          navigate('/', { replace: true });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      return;
     }
+    auth
+      .authorize(email, password)
+      .then((data) => {
+        if (data.jwt) {
+          login();
+          navigate('/', { replace: true });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (

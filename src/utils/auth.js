@@ -7,7 +7,7 @@ export const register = (email, password) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ password, email }),
+    body: JSON.stringify({ email, password }),
   })
     .then((response) => {
       if (response.status === 201) {
@@ -27,12 +27,15 @@ export const authorize = (email, password) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({
+      email: 'email@email.com',
+      password: 'somepassword',
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      if (data.jwt) {
+        localStorage.setItem('jwt', data.jwt);
         return data;
       }
     })
