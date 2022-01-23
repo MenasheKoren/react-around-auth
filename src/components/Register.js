@@ -12,12 +12,16 @@ export default function Register({ handleSubmitInfoToolTip }) {
     e.preventDefault();
     auth
       .register(email, password)
-      .then(login())
-      .then(() => {
-        handleSubmitInfoToolTip();
+      .then((res) => {
+        // todo Find something to put in the if statement
+        if (res.status === 201) {
+          login();
+          handleSubmitInfoToolTip();
+        } else {
+          handleSubmitInfoToolTip();
+        }
       })
       .catch((err) => {
-        handleSubmitInfoToolTip();
         console.log(err);
       });
   }

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
-export default function Login({ handleSubmitInfoToolTip }) {
+export default function Login({ handleSubmitInfoToolTip, token }) {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -19,7 +19,8 @@ export default function Login({ handleSubmitInfoToolTip }) {
     auth
       .authorize(email, password)
       .then((data) => {
-        if (data.jwt) {
+        console.log(token);
+        if (token) {
           login();
           navigate('/', { replace: true });
         }

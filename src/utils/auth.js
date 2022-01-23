@@ -7,7 +7,10 @@ export const register = (email, password) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({
+      email,
+      password,
+    }),
   })
     .then((response) => {
       if (response.status === 201) {
@@ -28,16 +31,36 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email: 'email@email.com',
-      password: 'somepassword',
+      email,
+      password,
     }),
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.jwt) {
-        localStorage.setItem('jwt', data.jwt);
+      // todo Find something to put in the if statement
+
+      if (data.token) {
+        localStorage.setItem('token', data.token);
         return data;
       }
     })
     .catch((err) => console.log(err));
+};
+
+// we pass this route the token as a parameter, and use
+// that token in the Authorization header
+export const getContent = (token) => {
+  return (
+    fetch(`${BASE_URL}/users/me`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      // received data will include user data, such as email
+      .then((data) => data)
+  );
 };
