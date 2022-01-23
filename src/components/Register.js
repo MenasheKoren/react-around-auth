@@ -1,20 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import * as auth from '../utils/auth';
+import { useAuth } from '../utils/useAuth';
 
-export default function Register(props) {
-  // const navigate = useNavigate();
-  // const { login } = useAuth();
-  // function handleSubmitRegister(e) {
-  //   e.preventDefault();
-  //   login()
-  //     .then(() => {
-  //       navigate("/", { replace: true });
-  //     })
-  //     .catch((err) => {
-  //       navigate("/");
-  //       console.log(err);
-  //     });
-  // }
+export default function Register({ handleSubmitInfoToolTip }) {
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleSubmitRegister(e) {
+    e.preventDefault();
+    auth
+      .register(email, password)
+      .then(login())
+      .then(() => {
+        handleSubmitInfoToolTip();
+      })
+      .catch((err) => {
+        handleSubmitInfoToolTip();
+        console.log(err);
+      });
+  }
   return (
     <section className={`entry entry_type_signup`}>
       <h2 className="entry__title">Sign up</h2>
@@ -25,7 +31,9 @@ export default function Register(props) {
           placeholder="Email"
           id="email-input"
           name="email"
-          // required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <span className="error-message" id="email-input-error" />
         <input
@@ -34,13 +42,15 @@ export default function Register(props) {
           placeholder="Password"
           id="password-input"
           name="password"
-          // required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <span className="error-message" id="password-input-error" />
         <button
           className="entry__save button button_hover_darker"
           type="submit"
-          onClick={props.handleRegisterSubmitInfoToolTip}
+          onClick={handleSubmitRegister}
         >
           Sign up
         </button>

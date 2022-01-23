@@ -1,7 +1,7 @@
-import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../images/logo.svg";
-import { useAuth } from "../utils/useAuth";
+import React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logo from '../images/logo.svg';
+import { useAuth } from '../utils/useAuth';
 
 export default function Header() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function Header() {
   function handleLogout() {
     logout()
       .then(() => {
-        navigate("/signin", { replace: true });
+        navigate('/signin', { replace: true });
       })
       .catch((err) => {
         console.log(err);
@@ -30,12 +30,12 @@ export default function Header() {
         </Link>
       )}
 
-      {location.pathname === "/signin" && (
+      {location.pathname === '/signin' && (
         <Link className="link" to="/signup">
           Sign up
         </Link>
       )}
-      {location.pathname === "/signup" && (
+      {location.pathname === '/signup' && (
         <Link className="link" to="signin">
           Log in
         </Link>

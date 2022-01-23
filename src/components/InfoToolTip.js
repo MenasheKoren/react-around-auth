@@ -1,21 +1,22 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import fail from "../images/fail.png";
-import success from "../images/success.png";
-import { useAuth } from "../utils/useAuth";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import fail from '../images/fail.png';
+import success from '../images/success.png';
+import { useAuth } from '../utils/useAuth';
 
-export const InfoToolTip = (props) => {
+export const InfoToolTip = ({ closeAllPopups, isOpen }) => {
   const { isAuthed } = useAuth();
   const navigate = useNavigate();
   function handleCloseSuccessPopup() {
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
+    closeAllPopups();
   }
   return (
     <section
       className={[
-        "popup popup_type_info-tool-tip",
-        props.isOpen ? "popup_opened" : "",
-      ].join(" ")}
+        'popup popup_type_info-tool-tip',
+        isOpen ? 'popup_opened' : '',
+      ].join(' ')}
     >
       <div className="popup__container popup__container_type_info-tool-tip">
         {isAuthed && (
@@ -40,7 +41,7 @@ export const InfoToolTip = (props) => {
             <button
               className="popup__close  button button_hover_dark"
               type="button"
-              onClick={props.closeAllPopups}
+              onClick={closeAllPopups}
             />
             <img
               src={fail}

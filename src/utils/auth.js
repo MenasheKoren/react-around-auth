@@ -1,13 +1,13 @@
-const BASE_URL = "https://register.nomoreparties.co";
+const BASE_URL = 'https://register.nomoreparties.co';
 
-export const register = (username, email, password) => {
+export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password, email }),
+    body: JSON.stringify({ password, email }),
   })
     .then((response) => {
       if (response.status === 201) {
@@ -22,17 +22,17 @@ export const register = (username, email, password) => {
 
 export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
   })
     .then((response) => response.json())
     .then((data) => {
       if (data.token) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token);
         return data;
       }
     })

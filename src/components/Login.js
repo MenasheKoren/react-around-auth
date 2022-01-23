@@ -1,22 +1,28 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/useAuth";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/useAuth';
 
-export default function Login() {
+export default function Login({ handleSubmitInfoToolTip }) {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   function handleSubmitLogin(e) {
     e.preventDefault();
-    login()
-      .then(() => {
-        navigate("/", { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!email || !password) {
+      handleSubmitInfoToolTip();
+    } else {
+      login()
+        .then(() => {
+          navigate('/', { replace: true });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
-
-  const navigate = useNavigate();
-
-  const { login } = useAuth();
 
   return (
     <section className={`entry entry_type_login`}>
@@ -28,6 +34,8 @@ export default function Login() {
           placeholder="Email"
           id="email-input"
           name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -37,6 +45,8 @@ export default function Login() {
           placeholder="Password"
           id="password-input"
           name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <span className="error-message" id="password-input-error" />

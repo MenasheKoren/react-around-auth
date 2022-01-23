@@ -1,38 +1,35 @@
-import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import "../index.css";
-import api from "../utils/api";
+import React, { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import '../index.css';
+import api from '../utils/api';
 
-import { AuthProvider } from "../utils/authProvider";
-import { AddPlacePopup } from "./AddPlacePopup";
-import { EditAvatarPopup } from "./EditAvatarPopup";
+import { AuthProvider } from '../utils/authProvider';
+import { AddPlacePopup } from './AddPlacePopup';
+import { EditAvatarPopup } from './EditAvatarPopup';
 
-import { EditProfilePopup } from "./EditProfilePopup";
-import ImagePopup from "./ImagePopup";
-import { InfoToolTip } from "./InfoToolTip";
-import Layout from "./Layout";
-import Login from "./Login";
+import { EditProfilePopup } from './EditProfilePopup';
+import ImagePopup from './ImagePopup';
+import { InfoToolTip } from './InfoToolTip';
+import Layout from './Layout';
+import Login from './Login';
 
-import Main from "./Main";
-import PopupWithForm from "./PopupWithForm";
-import { ProtectedRoute } from "./ProtectedRoute";
-import Register from "./Register";
+import Main from './Main';
+import PopupWithForm from './PopupWithForm';
+import { ProtectedRoute } from './ProtectedRoute';
+import Register from './Register';
 
 function App() {
-  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] =
-    React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
 
-  const [selectedCardData, setSelectedCardData] = React.useState({});
-  const [cardList, setCardList] = React.useState([]);
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [selectedCardData, setSelectedCardData] = useState({});
+  const [cardList, setCardList] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     api
@@ -132,8 +129,8 @@ function App() {
       .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
   }
 
-  function handleRegisterSubmitInfoToolTip() {
-    setIsPopupOpen(true);
+  function handleSubmitInfoToolTip() {
+    setIsInfoToolTipPopupOpen(true);
   }
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -158,7 +155,7 @@ function App() {
     setIsDeletePlacePopupOpen(false);
     setIsImagePopupOpen(false);
     setSelectedCardData({});
-    setIsPopupOpen(false);
+    setIsInfoToolTipPopupOpen(false);
   }
 
   return (
@@ -214,24 +211,31 @@ function App() {
               path="signup"
               element={
                 <>
-                  <Register
-                    handleRegisterSubmitInfoToolTip={
-                      handleRegisterSubmitInfoToolTip
-                    }
-                  />
+                  <Register handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
                   <InfoToolTip
-                    isOpen={isPopupOpen}
+                    isOpen={isInfoToolTipPopupOpen}
                     closeAllPopups={closeAllPopups}
                   />
                 </>
               }
             />
 
-            <Route path=" signin" element={<Login />} />
+            <Route
+              path="signin"
+              element={
+                <>
+                  <Login handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
+                  <InfoToolTip
+                    isOpen={isInfoToolTipPopupOpen}
+                    closeAllPopups={closeAllPopups}
+                  />
+                </>
+              }
+            />
             <Route
               path="*"
               element={
-                <main style={{ padding: "1rem" }}>
+                <main style={{ padding: '1rem' }}>
                   <h1>Error 404: There's nothing here!</h1>
                 </main>
               }

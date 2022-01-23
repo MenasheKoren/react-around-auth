@@ -1,5 +1,5 @@
-import React from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import React from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
 export function AuthProvider({ children }) {
   const [isAuthed, setIsAuthed] = React.useState(false);
