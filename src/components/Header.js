@@ -30,12 +30,12 @@ export default function Header() {
         </Link>
       )}
 
-      {location.pathname === '/signin' && (
+      {location.pathname === '/signin' && !isAuthed && (
         <Link className="link" to="/signup">
           Sign up
         </Link>
       )}
-      {location.pathname === '/signup' && (
+      {location.pathname === '/signup' && !isAuthed && (
         <Link className="link" to="signin">
           Log in
         </Link>

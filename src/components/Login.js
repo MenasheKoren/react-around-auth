@@ -19,8 +19,7 @@ export default function Login({ handleSubmitInfoToolTip, token }) {
     auth
       .authorize(email, password)
       .then((data) => {
-        console.log(token);
-        if (token) {
+        if (data.token) {
           login();
           navigate('/', { replace: true });
         }

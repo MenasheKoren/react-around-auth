@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   function logout() {
     return new Promise((res) => {
       setIsAuthed(false);
+      localStorage.removeItem('token');
       res();
     }).catch((err) => {
       console.log(err);
