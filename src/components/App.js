@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { AppContext } from '../contexts/AppContext';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
@@ -19,7 +20,7 @@ import PopupWithForm from './PopupWithForm';
 import { ProtectedRoute } from './ProtectedRoute';
 import Register from './Register';
 
-function App() {
+function App(data) {
   const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -31,6 +32,8 @@ function App() {
   const [cardList, setCardList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
+  const [email, setEmail] = useState(`email@email.com`);
+  console.log(`Email: ${email}`);
 
   useEffect(() => {
     api
@@ -166,91 +169,93 @@ function App() {
   return (
     <AuthProvider>
       <CurrentUserContext.Provider value={currentUser}>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route
-              index
-              element={
-                <ProtectedRoute>
-                  <Main
-                    onEditAvatarClick={handleEditAvatarClick}
-                    onEditProfileClick={handleEditProfileClick}
-                    onAddPlaceClick={handleAddPlaceClick}
-                    handleCardClick={handleCardClick}
-                    onDeletePlaceClick={handleDeletePlaceClick}
-                    cardList={cardList}
-                    handleCardLike={handleCardLike}
-                    handleDeleteCard={handleDeleteCard}
-                  />
-                  <EditAvatarPopup
-                    isOpen={isEditAvatarPopupOpen}
-                    closeAllPopups={closeAllPopups}
-                    onUpdateAvatar={handleUpdateAvatar}
-                  />
-                  <EditProfilePopup
-                    isOpen={isEditProfilePopupOpen}
-                    closeAllPopups={closeAllPopups}
-                    onUpdateUser={handleUpdateUser}
-                  />
-                  <AddPlacePopup
-                    isOpen={isAddPlacePopupOpen}
-                    closeAllPopups={closeAllPopups}
-                    onUpdateAddPlace={handleAddPlaceSubmit}
-                  />
-                  <PopupWithForm
-                    name="remove-card"
-                    title="Are you sure?"
-                    buttonText="Yes"
-                    isOpen={isDeletePlacePopupOpen}
-                    closeAllPopups={closeAllPopups}
-                  />
-                  <ImagePopup
-                    closeAllPopups={closeAllPopups}
-                    selectedCardData={selectedCardData}
-                    isOpen={isImagePopupOpen}
-                  />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="signup"
-              element={
-                <>
-                  <Register
-                    handleSubmitInfoToolTip={handleSubmitInfoToolTip}
-                    handleSetRegistration={handleSetRegistration}
-                  />
-                  <InfoToolTip
-                    isOpen={isInfoToolTipPopupOpen}
-                    closeAllPopups={closeAllPopups}
-                    isRegistered={isRegistered}
-                  />
-                </>
-              }
-            />
+        <AppContext.Provider value={{ email, setEmail }}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Main
+                      onEditAvatarClick={handleEditAvatarClick}
+                      onEditProfileClick={handleEditProfileClick}
+                      onAddPlaceClick={handleAddPlaceClick}
+                      handleCardClick={handleCardClick}
+                      onDeletePlaceClick={handleDeletePlaceClick}
+                      cardList={cardList}
+                      handleCardLike={handleCardLike}
+                      handleDeleteCard={handleDeleteCard}
+                    />
+                    <EditAvatarPopup
+                      isOpen={isEditAvatarPopupOpen}
+                      closeAllPopups={closeAllPopups}
+                      onUpdateAvatar={handleUpdateAvatar}
+                    />
+                    <EditProfilePopup
+                      isOpen={isEditProfilePopupOpen}
+                      closeAllPopups={closeAllPopups}
+                      onUpdateUser={handleUpdateUser}
+                    />
+                    <AddPlacePopup
+                      isOpen={isAddPlacePopupOpen}
+                      closeAllPopups={closeAllPopups}
+                      onUpdateAddPlace={handleAddPlaceSubmit}
+                    />
+                    <PopupWithForm
+                      name="remove-card"
+                      title="Are you sure?"
+                      buttonText="Yes"
+                      isOpen={isDeletePlacePopupOpen}
+                      closeAllPopups={closeAllPopups}
+                    />
+                    <ImagePopup
+                      closeAllPopups={closeAllPopups}
+                      selectedCardData={selectedCardData}
+                      isOpen={isImagePopupOpen}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="signup"
+                element={
+                  <>
+                    <Register
+                      handleSubmitInfoToolTip={handleSubmitInfoToolTip}
+                      handleSetRegistration={handleSetRegistration}
+                    />
+                    <InfoToolTip
+                      isOpen={isInfoToolTipPopupOpen}
+                      closeAllPopups={closeAllPopups}
+                      isRegistered={isRegistered}
+                    />
+                  </>
+                }
+              />
 
-            <Route
-              path="signin"
-              element={
-                <>
-                  <Login handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
-                  <InfoToolTip
-                    isOpen={isInfoToolTipPopupOpen}
-                    closeAllPopups={closeAllPopups}
-                  />
-                </>
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: '1rem' }}>
-                  <h1>Error 404: There's nothing here!</h1>
-                </main>
-              }
-            />
-          </Route>
-        </Routes>
+              <Route
+                path="signin"
+                element={
+                  <>
+                    <Login handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
+                    <InfoToolTip
+                      isOpen={isInfoToolTipPopupOpen}
+                      closeAllPopups={closeAllPopups}
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  <main style={{ padding: '1rem' }}>
+                    <h1>Error 404: There's nothing here!</h1>
+                  </main>
+                }
+              />
+            </Route>
+          </Routes>
+        </AppContext.Provider>
       </CurrentUserContext.Provider>
     </AuthProvider>
   );

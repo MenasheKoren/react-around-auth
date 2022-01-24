@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppContext } from '../contexts/AppContext';
 import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
@@ -7,17 +8,17 @@ export default function Login({ handleSubmitInfoToolTip }) {
   const navigate = useNavigate();
   const { login, tokenCheck } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   tokenCheck();
 
-  function handleEmailChange(e) {
+  const [email, setEmail] = useContext(AppContext);
+  const [password, setPassword] = useState('');
+
+  function handleUpdateEmail(e) {
     e.preventDefault();
     setEmail(e.target.value);
   }
 
-  function handlePasswordChange(e) {
+  function handleUpdatePassword(e) {
     e.preventDefault();
     setPassword(e.target.value);
   }
@@ -52,7 +53,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
           id="email-input"
           name="email"
           value={email || ''}
-          onChange={handleEmailChange}
+          onChange={handleUpdateEmail}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -63,7 +64,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
           id="password-input"
           name="password"
           value={password || ''}
-          onChange={handlePasswordChange}
+          onChange={handleUpdatePassword}
           required
           minLength="2"
           maxLength="40"

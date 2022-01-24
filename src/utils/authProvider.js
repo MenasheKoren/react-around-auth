@@ -5,11 +5,10 @@ import * as auth from './auth';
 
 export function AuthProvider({ children }) {
   const [isAuthed, setIsAuthed] = useState(false);
-
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  function tokenCheck() {
+  const tokenCheck = () => {
     if (token) {
       localStorage.getItem('token');
       auth
@@ -22,7 +21,7 @@ export function AuthProvider({ children }) {
           console.log(err);
         });
     }
-  }
+  };
 
   function login() {
     return new Promise((res) => {
