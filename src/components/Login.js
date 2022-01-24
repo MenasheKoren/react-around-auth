@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../contexts/AppContext';
 import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
@@ -10,7 +9,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
 
   tokenCheck();
 
-  const [email, setEmail] = useContext(AppContext);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function handleUpdateEmail(e) {
