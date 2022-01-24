@@ -30,6 +30,7 @@ function App() {
   const [selectedCardData, setSelectedCardData] = useState({});
   const [cardList, setCardList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [isRegistered, setIsRegistered] = useState(false);
 
   useEffect(() => {
     api
@@ -129,6 +130,10 @@ function App() {
       .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
   }
 
+  function handleSetRegistration() {
+    setIsRegistered(true);
+  }
+
   function handleSubmitInfoToolTip() {
     setIsInfoToolTipPopupOpen(true);
   }
@@ -211,10 +216,14 @@ function App() {
               path="signup"
               element={
                 <>
-                  <Register handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
+                  <Register
+                    handleSubmitInfoToolTip={handleSubmitInfoToolTip}
+                    handleSetRegistration={handleSetRegistration}
+                  />
                   <InfoToolTip
                     isOpen={isInfoToolTipPopupOpen}
                     closeAllPopups={closeAllPopups}
+                    isRegistered={isRegistered}
                   />
                 </>
               }

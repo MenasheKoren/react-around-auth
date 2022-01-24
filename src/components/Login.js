@@ -3,12 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
-export default function Login({ handleSubmitInfoToolTip, token }) {
+export default function Login({ handleSubmitInfoToolTip }) {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, tokenCheck } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  tokenCheck();
+
+  function handleEmailChange(e) {
+    e.preventDefault();
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    e.preventDefault();
+    setPassword(e.target.value);
+  }
 
   function handleSubmitLogin(e) {
     e.preventDefault();
@@ -39,8 +51,8 @@ export default function Login({ handleSubmitInfoToolTip, token }) {
           placeholder="Email"
           id="email-input"
           name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={email || ''}
+          onChange={handleEmailChange}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -50,9 +62,12 @@ export default function Login({ handleSubmitInfoToolTip, token }) {
           placeholder="Password"
           id="password-input"
           name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={password || ''}
+          onChange={handlePasswordChange}
           required
+          minLength="2"
+          maxLength="40"
+          pattern=".*\S.*"
         />
         <span className="error-message" id="password-input-error" />
         <button

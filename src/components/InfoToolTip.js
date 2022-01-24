@@ -2,13 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import fail from '../images/fail.png';
 import success from '../images/success.png';
-import { useAuth } from '../utils/useAuth';
 
-export const InfoToolTip = ({ closeAllPopups, isOpen }) => {
-  const { isAuthed } = useAuth();
+export const InfoToolTip = ({ closeAllPopups, isOpen, isRegistered }) => {
+  // const { isAuthed } = useAuth();
+
   const navigate = useNavigate();
   function handleCloseSuccessPopup() {
-    navigate('/', { replace: true });
+    navigate('/signin', { replace: true });
     closeAllPopups();
   }
   return (
@@ -19,7 +19,7 @@ export const InfoToolTip = ({ closeAllPopups, isOpen }) => {
       ].join(' ')}
     >
       <div className="popup__container popup__container_type_info-tool-tip">
-        {isAuthed && (
+        {isRegistered && (
           <>
             <button
               className="popup__close button button_hover_dark"
@@ -36,7 +36,7 @@ export const InfoToolTip = ({ closeAllPopups, isOpen }) => {
             </h2>
           </>
         )}
-        {!isAuthed && (
+        {!isRegistered && (
           <>
             <button
               className="popup__close  button button_hover_dark"

@@ -3,19 +3,33 @@ import { Link } from 'react-router-dom';
 import * as auth from '../utils/auth';
 import { useAuth } from '../utils/useAuth';
 
-export default function Register({ handleSubmitInfoToolTip }) {
-  const { login } = useAuth();
+export default function Register({
+  handleSubmitInfoToolTip,
+  handleSetRegistration,
+}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { tokenCheck } = useAuth();
+
+  tokenCheck();
+
+  function handleEmailChange(e) {
+    e.preventDefault();
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    e.preventDefault();
+    setPassword(e.target.value);
+  }
 
   function handleSubmitRegister(e) {
     e.preventDefault();
     auth
       .register(email, password)
       .then((result) => {
-        console.dir(result);
         if (result.data && result.data._id) {
-          login();
+          handleSetRegistration();
           handleSubmitInfoToolTip();
         } else {
           handleSubmitInfoToolTip();
@@ -36,7 +50,7 @@ export default function Register({ handleSubmitInfoToolTip }) {
           id="email-input"
           name="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -47,8 +61,11 @@ export default function Register({ handleSubmitInfoToolTip }) {
           id="password-input"
           name="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           required
+          minLength="2"
+          maxLength="40"
+          pattern=".*\S.*"
         />
         <span className="error-message" id="password-input-error" />
         <button

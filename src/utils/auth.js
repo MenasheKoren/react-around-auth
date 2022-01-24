@@ -1,5 +1,7 @@
 const BASE_URL = 'https://register.nomoreparties.co';
 
+export const token = localStorage.getItem('token');
+
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
@@ -13,7 +15,6 @@ export const register = (email, password) => {
     }),
   })
     .then((response) => {
-      console.log(response);
       if (response.status === 201) {
         return response.json();
       }
