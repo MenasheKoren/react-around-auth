@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
-import { AppProvider } from '../utils/AppProvider';
+// import { AppProvider } from '../utils/AppProvider';
 // import { token } from '../utils/auth';
-import { AuthProvider } from '../utils/AuthProvider';
-import { useAuth } from '../utils/useAuth';
+import * as auth from '../utils/auth';
+// import { AuthProvider } from '../utils/AuthProvider';
+// import { useAuth } from '../utils/useAuth';
 import { AddPlacePopup } from './AddPlacePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 
@@ -22,8 +23,6 @@ import { ProtectedRoute } from './ProtectedRoute';
 import Register from './Register';
 
 function App() {
-  const tokenCheck = useAuth();
-
   const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -35,6 +34,12 @@ function App() {
   const [cardList, setCardList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -67,9 +72,89 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    tokenCheck(token);
-  }, [tokenCheck]);
+    if (token) {
+      localStorage.getItem('token');
+      auth.getContent(token).then(() => {
+        setIsAuthed(true);
+        navigate('/', { replace: true });
+      });
+    }
+  }, [navigate, token]);
+
+  function handleLogin() {
+    return new Promise((res) => {
+      setIsAuthed(true);
+      res();
+    });
+  }
+
+  function handleLogout() {
+    return new Promise((res) => {
+      setIsAuthed(false);
+      localStorage.removeItem('token');
+      res();
+    })
+      .then(() => {
+        navigate('/signin', { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleInputEmail(e) {
+    e.preventDefault();
+    setEmailInput(e.target.value);
+  }
+
+  function handleInputPassword(e) {
+    e.preventDefault();
+    setPasswordInput(e.target.value);
+  }
+
+  function handleSubmitLogin(e) {
+    e.preventDefault();
+    if (!emailInput || !passwordInput) {
+      handleSubmitInfoToolTip();
+      return;
+    }
+    auth
+      .authorize(emailInput, passwordInput)
+      .then((data) => {
+        if (data.token) {
+          setLoginEmail(emailInput);
+          handleLogin().then(() => {
+            navigate('/', { replace: true });
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleSubmitRegister(e) {
+    e.preventDefault();
+    auth
+      .register(emailInput, passwordInput)
+      .then((result) => {
+        if (result.data && result.data._id) {
+          handleSetRegistration();
+          handleSubmitInfoToolTip();
+        } else {
+          handleSubmitInfoToolTip();
+        }
+      })
+      .catch((err) => {
+        handleSubmitInfoToolTip();
+        console.log(err);
+      });
+  }
+
+  function handleCloseSuccessPopup() {
+    navigate('/signin', { replace: true });
+    closeAllPopups();
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -154,7 +239,9 @@ function App() {
   function handleSetRegistration() {
     setIsRegistered(true);
   }
-
+  // function handleUpdateLoginEmail() {
+  //   setLoginEmail(emailInput);
+  // }
   function handleSubmitInfoToolTip() {
     setIsInfoToolTipPopupOpen(true);
   }
@@ -185,97 +272,116 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <CurrentUserContext.Provider value={currentUser}>
-        <AppProvider>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route
-                index
-                element={
-                  <ProtectedRoute>
-                    <Main
-                      onEditAvatarClick={handleEditAvatarClick}
-                      onEditProfileClick={handleEditProfileClick}
-                      onAddPlaceClick={handleAddPlaceClick}
-                      handleCardClick={handleCardClick}
-                      onDeletePlaceClick={handleDeletePlaceClick}
-                      cardList={cardList}
-                      handleCardLike={handleCardLike}
-                      handleDeleteCard={handleDeleteCard}
-                    />
-                    <EditAvatarPopup
-                      isOpen={isEditAvatarPopupOpen}
-                      closeAllPopups={closeAllPopups}
-                      onUpdateAvatar={handleUpdateAvatar}
-                    />
-                    <EditProfilePopup
-                      isOpen={isEditProfilePopupOpen}
-                      closeAllPopups={closeAllPopups}
-                      onUpdateUser={handleUpdateUser}
-                    />
-                    <AddPlacePopup
-                      isOpen={isAddPlacePopupOpen}
-                      closeAllPopups={closeAllPopups}
-                      onUpdateAddPlace={handleAddPlaceSubmit}
-                    />
-                    <PopupWithForm
-                      name="remove-card"
-                      title="Are you sure?"
-                      buttonText="Yes"
-                      isOpen={isDeletePlacePopupOpen}
-                      closeAllPopups={closeAllPopups}
-                    />
-                    <ImagePopup
-                      closeAllPopups={closeAllPopups}
-                      selectedCardData={selectedCardData}
-                      isOpen={isImagePopupOpen}
-                    />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="signup"
-                element={
-                  <>
-                    <Register
-                      handleSubmitInfoToolTip={handleSubmitInfoToolTip}
-                      handleSetRegistration={handleSetRegistration}
-                    />
-                    <InfoToolTip
-                      isOpen={isInfoToolTipPopupOpen}
-                      closeAllPopups={closeAllPopups}
-                      isRegistered={isRegistered}
-                    />
-                  </>
-                }
-              />
+    <CurrentUserContext.Provider value={currentUser}>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout
+              handleLogout={handleLogout}
+              isAuthed={isAuthed}
+              loginEmail={loginEmail}
+            />
+          }
+        >
+          <Route
+            index
+            element={
+              <ProtectedRoute isAuthed={isAuthed}>
+                <Main
+                  onEditAvatarClick={handleEditAvatarClick}
+                  onEditProfileClick={handleEditProfileClick}
+                  onAddPlaceClick={handleAddPlaceClick}
+                  handleCardClick={handleCardClick}
+                  onDeletePlaceClick={handleDeletePlaceClick}
+                  cardList={cardList}
+                  handleCardLike={handleCardLike}
+                  handleDeleteCard={handleDeleteCard}
+                />
+                <EditAvatarPopup
+                  isOpen={isEditAvatarPopupOpen}
+                  closeAllPopups={closeAllPopups}
+                  onUpdateAvatar={handleUpdateAvatar}
+                />
+                <EditProfilePopup
+                  isOpen={isEditProfilePopupOpen}
+                  closeAllPopups={closeAllPopups}
+                  onUpdateUser={handleUpdateUser}
+                />
+                <AddPlacePopup
+                  isOpen={isAddPlacePopupOpen}
+                  closeAllPopups={closeAllPopups}
+                  onUpdateAddPlace={handleAddPlaceSubmit}
+                />
+                <PopupWithForm
+                  name="remove-card"
+                  title="Are you sure?"
+                  buttonText="Yes"
+                  isOpen={isDeletePlacePopupOpen}
+                  closeAllPopups={closeAllPopups}
+                />
+                <ImagePopup
+                  closeAllPopups={closeAllPopups}
+                  selectedCardData={selectedCardData}
+                  isOpen={isImagePopupOpen}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <>
+                <Register
+                  handleSubmitInfoToolTip={handleSubmitInfoToolTip}
+                  handleSetRegistration={handleSetRegistration}
+                  handleSubmitRegister={handleSubmitRegister}
+                  isAuthed={isAuthed}
+                  handleInputEmail={handleInputEmail}
+                  handleInputPassword={handleInputPassword}
+                  email={emailInput}
+                  password={passwordInput}
+                />
+                <InfoToolTip
+                  isOpen={isInfoToolTipPopupOpen}
+                  closeAllPopups={closeAllPopups}
+                  isRegistered={isRegistered}
+                  handleCloseSuccessPopup={handleCloseSuccessPopup}
+                />
+              </>
+            }
+          />
 
-              <Route
-                path="signin"
-                element={
-                  <>
-                    <Login handleSubmitInfoToolTip={handleSubmitInfoToolTip} />
-                    <InfoToolTip
-                      isOpen={isInfoToolTipPopupOpen}
-                      closeAllPopups={closeAllPopups}
-                    />
-                  </>
-                }
-              />
-              <Route
-                path="*"
-                element={
-                  <main style={{ padding: '1rem' }}>
-                    <h1>Error 404: There's nothing here!</h1>
-                  </main>
-                }
-              />
-            </Route>
-          </Routes>
-        </AppProvider>
-      </CurrentUserContext.Provider>
-    </AuthProvider>
+          <Route
+            path="signin"
+            element={
+              <>
+                <Login
+                  handleSubmitInfoToolTip={handleSubmitInfoToolTip}
+                  handleInputEmail={handleInputEmail}
+                  handleInputPassword={handleInputPassword}
+                  email={emailInput}
+                  password={passwordInput}
+                  handleSubmitLogin={handleSubmitLogin}
+                />
+                <InfoToolTip
+                  isOpen={isInfoToolTipPopupOpen}
+                  closeAllPopups={closeAllPopups}
+                />
+              </>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: '1rem' }}>
+                <h1>Error 404: There's nothing here!</h1>
+              </main>
+            }
+          />
+        </Route>
+      </Routes>
+    </CurrentUserContext.Provider>
   );
 }
 

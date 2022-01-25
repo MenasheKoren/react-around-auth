@@ -1,47 +1,13 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import * as auth from '../utils/auth';
-import { useApp } from '../utils/useApp';
-import { useAuth } from '../utils/useAuth';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Login({ handleSubmitInfoToolTip }) {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const { handleUpdateLoginEmail } = useApp();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  function handleUpdateEmail(e) {
-    e.preventDefault();
-    setEmail(e.target.value);
-  }
-
-  function handleUpdatePassword(e) {
-    e.preventDefault();
-    setPassword(e.target.value);
-  }
-
-  function handleSubmitLogin(e) {
-    e.preventDefault();
-    if (!email || !password) {
-      handleSubmitInfoToolTip();
-      return;
-    }
-    auth
-      .authorize(email, password)
-      .then((data) => {
-        if (data.token) {
-          handleUpdateLoginEmail(email);
-          login();
-          navigate('/', { replace: true });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
+export default function Login({
+  handleInputEmail,
+  handleInputPassword,
+  email,
+  password,
+  handleSubmitLogin,
+}) {
   return (
     <section className={`entry entry_type_login`}>
       <h2 className="entry__title">Log in</h2>
@@ -53,7 +19,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
           id="email-input"
           name="email"
           value={email || ''}
-          onChange={handleUpdateEmail}
+          onChange={handleInputEmail}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -64,7 +30,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
           id="password-input"
           name="password"
           value={password || ''}
-          onChange={handleUpdatePassword}
+          onChange={handleInputPassword}
           required
           minLength="2"
           maxLength="40"

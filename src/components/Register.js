@@ -1,41 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import * as auth from '../utils/auth';
 
 export default function Register({
-  handleSubmitInfoToolTip,
-  handleSetRegistration,
+  handleInputEmail,
+  handleInputPassword,
+  email,
+  password,
+  handleSubmitRegister,
 }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  function handleEmailChange(e) {
-    e.preventDefault();
-    setEmail(e.target.value);
-  }
-
-  function handlePasswordChange(e) {
-    e.preventDefault();
-    setPassword(e.target.value);
-  }
-
-  function handleSubmitRegister(e) {
-    e.preventDefault();
-    auth
-      .register(email, password)
-      .then((result) => {
-        if (result.data && result.data._id) {
-          handleSetRegistration();
-          handleSubmitInfoToolTip();
-        } else {
-          handleSubmitInfoToolTip();
-        }
-      })
-      .catch((err) => {
-        handleSubmitInfoToolTip();
-        console.log(err);
-      });
-  }
   return (
     <section className={`entry entry_type_signup`}>
       <h2 className="entry__title">Sign up</h2>
@@ -47,7 +19,7 @@ export default function Register({
           id="email-input"
           name="email"
           value={email || ''}
-          onChange={handleEmailChange}
+          onChange={handleInputEmail}
           required
         />
         <span className="error-message" id="email-input-error" />
@@ -58,7 +30,7 @@ export default function Register({
           id="password-input"
           name="password"
           value={password || ''}
-          onChange={handlePasswordChange}
+          onChange={handleInputPassword}
           required
           minLength="2"
           maxLength="40"

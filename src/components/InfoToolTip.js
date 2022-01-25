@@ -1,16 +1,16 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import fail from '../images/fail.png';
 import success from '../images/success.png';
 
-export const InfoToolTip = ({ closeAllPopups, isOpen, isRegistered }) => {
+export const InfoToolTip = ({
+  closeAllPopups,
+  isOpen,
+  isRegistered,
+  handleCloseSuccessPopup,
+}) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
-  function handleCloseSuccessPopup() {
-    navigate('/signin', { replace: true });
-    closeAllPopups();
-  }
   return (
     <section
       className={[

@@ -1,24 +1,9 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../images/logo.svg';
-import { useApp } from '../utils/useApp';
-import { useAuth } from '../utils/useAuth';
 
-export default function Header() {
+export default function Header({ handleLogout, isAuthed, loginEmail }) {
   const location = useLocation();
-  const { isAuthed, logout } = useAuth();
-  const navigate = useNavigate();
-  const { loginEmail } = useApp();
-
-  function handleLogout() {
-    logout()
-      .then(() => {
-        navigate('/signin', { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   return (
     <header className="header">
