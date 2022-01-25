@@ -47,5 +47,5 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3"
   },
-  "homepage": "https://menashekoren.github.io/around-react-auth"
+  "homepage": "https://menashekoren.github.io/react-around-auth"
 }

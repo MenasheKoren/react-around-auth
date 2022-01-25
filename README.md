@@ -1,6 +1,6 @@
 # Project 14: Around the U.S. project on React, featuring authorization and registration.
 
-https://menashekoren.github.io/around-react-auth/
+https://menashekoren.github.io/react-around-auth/
 
 ### Overview
 

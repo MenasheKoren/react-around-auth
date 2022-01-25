@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 render(
   <React.StrictMode>
-    <BrowserRouter basename="/around-react-auth">
+    <BrowserRouter basename="/react-around-auth">
       <App />
     </BrowserRouter>
   </React.StrictMode>,
