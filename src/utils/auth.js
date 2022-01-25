@@ -1,3 +1,5 @@
+import checkResponse from './checkResponse';
+
 const BASE_URL = 'https://register.nomoreparties.co';
 
 export const token = localStorage.getItem('token');
@@ -14,15 +16,10 @@ export const register = (email, password) => {
       password,
     }),
   })
-    .then((response) => {
-      if (response.status === 201) {
-        return response.json();
-      }
-    })
+    .then(checkResponse)
     .then((res) => {
       return res;
-    })
-    .catch((err) => console.log(err));
+    });
 };
 
 export const authorize = (email, password) => {
@@ -37,14 +34,13 @@ export const authorize = (email, password) => {
       password,
     }),
   })
-    .then((response) => response.json())
+    .then(checkResponse)
     .then((data) => {
       if (data.token) {
         localStorage.setItem('token', data.token);
         return data;
       }
-    })
-    .catch((err) => console.log(err));
+    });
 };
 
 export const getContent = (token) => {
@@ -56,6 +52,6 @@ export const getContent = (token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
+    .then(checkResponse)
     .then((data) => data);
 };

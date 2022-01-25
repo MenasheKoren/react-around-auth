@@ -6,13 +6,12 @@ import { useAuth } from '../utils/useAuth';
 
 export default function Login({ handleSubmitInfoToolTip }) {
   const navigate = useNavigate();
-  const { login, tokenCheck } = useAuth();
+  const { login } = useAuth();
   const { handleUpdateLoginEmail } = useApp();
-
-  tokenCheck();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   function handleUpdateEmail(e) {
     e.preventDefault();
     setEmail(e.target.value);
@@ -73,7 +72,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
         />
         <span className="error-message" id="password-input-error" />
         <button
-          onClick={handleSubmitLogin}
+          onSubmit={handleSubmitLogin}
           className="entry__save button button_hover_dark"
           type="submit"
         >

@@ -8,6 +8,6 @@ export function AppProvider({ children }) {
     setLoginEmail(email);
   }
 
-  let value = { loginEmail, handleUpdateLoginEmail, setLoginEmail };
+  const value = { loginEmail, handleUpdateLoginEmail, setLoginEmail };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

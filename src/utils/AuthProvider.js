@@ -11,15 +11,10 @@ export function AuthProvider({ children }) {
   const tokenCheck = () => {
     if (token) {
       localStorage.getItem('token');
-      auth
-        .getContent(token)
-        .then(() => {
-          setIsAuthed(true);
-          navigate('/', { replace: true });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      auth.getContent(token).then(() => {
+        setIsAuthed(true);
+        navigate('/', { replace: true });
+      });
     }
   };
 
@@ -27,8 +22,6 @@ export function AuthProvider({ children }) {
     return new Promise((res) => {
       setIsAuthed(true);
       res();
-    }).catch((err) => {
-      console.log(err);
     });
   }
 
@@ -37,12 +30,10 @@ export function AuthProvider({ children }) {
       setIsAuthed(false);
       localStorage.removeItem('token');
       res();
-    }).catch((err) => {
-      console.log(err);
     });
   }
 
-  let value = { isAuthed, logout, login, tokenCheck };
+  const value = { isAuthed, logout, login, tokenCheck };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as auth from '../utils/auth';
-import { useAuth } from '../utils/useAuth';
 
 export default function Register({
   handleSubmitInfoToolTip,
@@ -9,9 +8,6 @@ export default function Register({
 }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { tokenCheck } = useAuth();
-
-  tokenCheck();
 
   function handleEmailChange(e) {
     e.preventDefault();
@@ -36,6 +32,7 @@ export default function Register({
         }
       })
       .catch((err) => {
+        handleSubmitInfoToolTip();
         console.log(err);
       });
   }
@@ -71,7 +68,7 @@ export default function Register({
         <button
           className="entry__save button button_hover_dark"
           type="submit"
-          onClick={handleSubmitRegister}
+          onSubmit={handleSubmitRegister}
         >
           Sign up
         </button>

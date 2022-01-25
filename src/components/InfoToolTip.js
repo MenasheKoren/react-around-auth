@@ -6,6 +6,7 @@ import success from '../images/success.png';
 export const InfoToolTip = ({ closeAllPopups, isOpen, isRegistered }) => {
   const location = useLocation();
   const navigate = useNavigate();
+
   function handleCloseSuccessPopup() {
     navigate('/signin', { replace: true });
     closeAllPopups();

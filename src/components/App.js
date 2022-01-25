@@ -4,8 +4,9 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
 import { AppProvider } from '../utils/AppProvider';
-
+// import { token } from '../utils/auth';
 import { AuthProvider } from '../utils/AuthProvider';
+import { useAuth } from '../utils/useAuth';
 import { AddPlacePopup } from './AddPlacePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 
@@ -21,6 +22,8 @@ import { ProtectedRoute } from './ProtectedRoute';
 import Register from './Register';
 
 function App() {
+  const tokenCheck = useAuth();
+
   const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -50,6 +53,23 @@ function App() {
       })
       .catch((err) => console.log(`Error.....: (getInitialCards) ${err}`));
   }, []);
+
+  useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener('keydown', closeByEscape);
+
+    return () => document.removeEventListener('keydown', closeByEscape);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    tokenCheck(token);
+  }, [tokenCheck]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
