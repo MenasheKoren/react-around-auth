@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/around-react-auth/static/css/main.0d5ed189.chunk.css",
-    "main.js": "/around-react-auth/static/js/main.deda10c4.chunk.js",
-    "main.js.map": "/around-react-auth/static/js/main.deda10c4.chunk.js.map",
-    "runtime-main.js": "/around-react-auth/static/js/runtime-main.ecd80027.js",
-    "runtime-main.js.map": "/around-react-auth/static/js/runtime-main.ecd80027.js.map",
-    "static/js/2.45973924.chunk.js": "/around-react-auth/static/js/2.45973924.chunk.js",
-    "static/js/2.45973924.chunk.js.map": "/around-react-auth/static/js/2.45973924.chunk.js.map",
-    "static/js/3.330af862.chunk.js": "/around-react-auth/static/js/3.330af862.chunk.js",
-    "static/js/3.330af862.chunk.js.map": "/around-react-auth/static/js/3.330af862.chunk.js.map",
-    "index.html": "/around-react-auth/index.html",
-    "static/css/main.0d5ed189.chunk.css.map": "/around-react-auth/static/css/main.0d5ed189.chunk.css.map",
-    "static/js/2.45973924.chunk.js.LICENSE.txt": "/around-react-auth/static/js/2.45973924.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/around-react-auth/static/media/remove.60c65873.svg",
-    "static/media/logo.18d6d792.svg": "/around-react-auth/static/media/logo.18d6d792.svg"
+    "main.css": "/react-around-auth/static/css/main.765c90b4.chunk.css",
+    "main.js": "/react-around-auth/static/js/main.8d36012f.chunk.js",
+    "main.js.map": "/react-around-auth/static/js/main.8d36012f.chunk.js.map",
+    "runtime-main.js": "/react-around-auth/static/js/runtime-main.44879f83.js",
+    "runtime-main.js.map": "/react-around-auth/static/js/runtime-main.44879f83.js.map",
+    "static/js/2.45973924.chunk.js": "/react-around-auth/static/js/2.45973924.chunk.js",
+    "static/js/2.45973924.chunk.js.map": "/react-around-auth/static/js/2.45973924.chunk.js.map",
+    "static/js/3.330af862.chunk.js": "/react-around-auth/static/js/3.330af862.chunk.js",
+    "static/js/3.330af862.chunk.js.map": "/react-around-auth/static/js/3.330af862.chunk.js.map",
+    "index.html": "/react-around-auth/index.html",
+    "static/css/main.765c90b4.chunk.css.map": "/react-around-auth/static/css/main.765c90b4.chunk.css.map",
+    "static/js/2.45973924.chunk.js.LICENSE.txt": "/react-around-auth/static/js/2.45973924.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/react-around-auth/static/media/remove.60c65873.svg",
+    "static/media/logo.18d6d792.svg": "/react-around-auth/static/media/logo.18d6d792.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.ecd80027.js",
+    "static/js/runtime-main.44879f83.js",
     "static/js/2.45973924.chunk.js",
-    "static/css/main.0d5ed189.chunk.css",
-    "static/js/main.deda10c4.chunk.js"
+    "static/css/main.765c90b4.chunk.css",
+    "static/js/main.8d36012f.chunk.js"
   ]
 }
