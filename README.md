@@ -1,8 +1,17 @@
-Around the U.S. project on React, featuring authorization and registration.
+# Project 14: Around the U.S. project on React, featuring authorization and registration.
 
-This repository will contain your own front-end project on React with added authorization and registration features.
-Start working with your previously built front end code from Sprint 11.
+https://menashekoren.github.io/around-react-auth/
 
-All authorization, registration and token requests must go through to the server running on [https://register.nomoreparties.co](https://register.nomoreparties.co/).
+### Overview
 
-Good luck!
+- Intro
+
+- Technologies
+
+**Intro**
+
+This repository is a front-end project with added authorization and registration features.
+
+**Technologies**
+
+This project was done using React.

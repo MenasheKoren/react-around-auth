@@ -74,13 +74,13 @@ export default function Login({ handleSubmitInfoToolTip }) {
         <span className="error-message" id="password-input-error" />
         <button
           onClick={handleSubmitLogin}
-          className="entry__save button  button_hover_dark"
+          className="entry__save button button_hover_dark"
           type="submit"
         >
           Log in
         </button>
       </form>
-      <Link to="/signup" className="link entry__redirect">
+      <Link to="/signup" className="link link__hover entry__redirect-text">
         Not a member yet? Sign up here!
       </Link>
     </section>

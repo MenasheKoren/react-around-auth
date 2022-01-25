@@ -20,7 +20,7 @@ import PopupWithForm from './PopupWithForm';
 import { ProtectedRoute } from './ProtectedRoute';
 import Register from './Register';
 
-function App(data) {
+function App() {
   const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);

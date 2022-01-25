@@ -33,9 +33,6 @@ export default function Register({
           handleSubmitInfoToolTip();
         } else {
           handleSubmitInfoToolTip();
-          // throw new Error({
-          //   message: '400 - one of the fields was filled in incorrectly',
-          // });
         }
       })
       .catch((err) => {
@@ -52,7 +49,7 @@ export default function Register({
           placeholder="Email"
           id="email-input"
           name="email"
-          value={email}
+          value={email || ''}
           onChange={handleEmailChange}
           required
         />
@@ -63,7 +60,7 @@ export default function Register({
           placeholder="Password"
           id="password-input"
           name="password"
-          value={password}
+          value={password || ''}
           onChange={handlePasswordChange}
           required
           minLength="2"
@@ -72,14 +69,14 @@ export default function Register({
         />
         <span className="error-message" id="password-input-error" />
         <button
-          className="entry__save button button_hover_darker"
+          className="entry__save button button_hover_dark"
           type="submit"
           onClick={handleSubmitRegister}
         >
           Sign up
         </button>
       </form>
-      <Link to="/signin" className="link entry__redirect">
+      <Link to="/signin" className="link link__hover entry__redirect-text">
         Already a member? Log in here!
       </Link>
     </section>
