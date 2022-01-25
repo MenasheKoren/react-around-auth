@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../images/logo.svg';
+import { useApp } from '../utils/useApp';
 import { useAuth } from '../utils/useAuth';
 
 export default function Header() {
   const location = useLocation();
   const { isAuthed, logout } = useAuth();
   const navigate = useNavigate();
-  // const value = useContext(AppContext);
+  const { loginEmail } = useApp();
 
   function handleLogout() {
     logout()
@@ -27,7 +28,7 @@ export default function Header() {
 
       {isAuthed && (
         <div className="header__user-area">
-          <p className="header__email">email test</p>
+          <p className="header__email">{loginEmail}</p>
           <Link to="/signin" onClick={handleLogout} replace className="link">
             Log out
           </Link>

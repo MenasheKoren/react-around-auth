@@ -1,11 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import fail from '../images/fail.png';
 import success from '../images/success.png';
 
 export const InfoToolTip = ({ closeAllPopups, isOpen, isRegistered }) => {
-  // const { isAuthed } = useAuth();
-
+  const location = useLocation();
   const navigate = useNavigate();
   function handleCloseSuccessPopup() {
     navigate('/signin', { replace: true });
@@ -36,7 +35,7 @@ export const InfoToolTip = ({ closeAllPopups, isOpen, isRegistered }) => {
             </h2>
           </>
         )}
-        {!isRegistered && (
+        {location.pathname === '/signup' && !isRegistered && (
           <>
             <button
               className="popup__close  button button_hover_dark"

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as auth from '../utils/auth';
+import { useApp } from '../utils/useApp';
 import { useAuth } from '../utils/useAuth';
 
 export default function Login({ handleSubmitInfoToolTip }) {
   const navigate = useNavigate();
   const { login, tokenCheck } = useAuth();
+  const { handleUpdateLoginEmail } = useApp();
 
   tokenCheck();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   function handleUpdateEmail(e) {
     e.preventDefault();
     setEmail(e.target.value);
@@ -32,6 +33,7 @@ export default function Login({ handleSubmitInfoToolTip }) {
       .authorize(email, password)
       .then((data) => {
         if (data.token) {
+          handleUpdateLoginEmail(email);
           login();
           navigate('/', { replace: true });
         }

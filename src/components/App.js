@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AppContext } from '../contexts/AppContext';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
+import { AppProvider } from '../utils/AppProvider';
 
-import { AuthProvider } from '../utils/authProvider';
+import { AuthProvider } from '../utils/AuthProvider';
 import { AddPlacePopup } from './AddPlacePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 
@@ -32,8 +32,6 @@ function App(data) {
   const [cardList, setCardList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
-  const [email, setEmail] = useState(`email@email.com`);
-  console.log(`Email: ${email}`);
 
   useEffect(() => {
     api
@@ -169,7 +167,7 @@ function App(data) {
   return (
     <AuthProvider>
       <CurrentUserContext.Provider value={currentUser}>
-        <AppContext.Provider value={{ email, setEmail }}>
+        <AppProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route
@@ -255,7 +253,7 @@ function App(data) {
               />
             </Route>
           </Routes>
-        </AppContext.Provider>
+        </AppProvider>
       </CurrentUserContext.Provider>
     </AuthProvider>
   );

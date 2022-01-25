@@ -33,6 +33,9 @@ export default function Register({
           handleSubmitInfoToolTip();
         } else {
           handleSubmitInfoToolTip();
+          // throw new Error({
+          //   message: '400 - one of the fields was filled in incorrectly',
+          // });
         }
       })
       .catch((err) => {
