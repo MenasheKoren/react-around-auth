@@ -11,7 +11,7 @@ export default function Register({
   return (
     <section className={`entry entry_type_signup`}>
       <h2 className="entry__title">Sign up</h2>
-      <form className="entry__form">
+      <form className="entry__form" onSubmit={handleSubmitRegister}>
         <input
           type="email"
           className="field-input field-input_type_entry"
@@ -37,11 +37,7 @@ export default function Register({
           pattern=".*\S.*"
         />
         <span className="error-message" id="password-input-error" />
-        <button
-          className="entry__save button button_hover_dark"
-          type="submit"
-          onSubmit={handleSubmitRegister}
-        >
+        <button className="entry__save button button_hover_dark" type="submit">
           Sign up
         </button>
       </form>

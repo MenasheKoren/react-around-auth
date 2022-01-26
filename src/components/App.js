@@ -3,11 +3,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
-// import { AppProvider } from '../utils/AppProvider';
-// import { token } from '../utils/auth';
 import * as auth from '../utils/auth';
-// import { AuthProvider } from '../utils/AuthProvider';
-// import { useAuth } from '../utils/useAuth';
 import { AddPlacePopup } from './AddPlacePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 
