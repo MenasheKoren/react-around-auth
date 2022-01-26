@@ -4,6 +4,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
 import * as auth from '../utils/auth';
+import { token } from '../utils/auth';
 import { AddPlacePopup } from './AddPlacePopup';
 import { EditAvatarPopup } from './EditAvatarPopup';
 
@@ -29,12 +30,10 @@ function App() {
   const [selectedCardData, setSelectedCardData] = useState({});
   const [cardList, setCardList] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [isAuthed, setIsAuthed] = useState(false);
-  const [loginEmail, setLoginEmail] = useState('');
-  const token = localStorage.getItem('token');
+  const localEmail = localStorage.getItem('localEmail');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,6 +57,10 @@ function App() {
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
+        if (isRegistered) {
+          navigate('/signin', { replace: true });
+          closeAllPopups();
+        }
         closeAllPopups();
       }
     };
@@ -65,31 +68,34 @@ function App() {
     document.addEventListener('keydown', closeByEscape);
 
     return () => document.removeEventListener('keydown', closeByEscape);
-  }, []);
+  }, [isRegistered, navigate]);
 
   useEffect(() => {
     if (token) {
-      localStorage.getItem('token');
+      localStorage.getItem(token);
       auth.getContent(token).then(() => {
-        setIsAuthed(true);
+        setIsRegistered(true);
         navigate('/', { replace: true });
       });
     }
-  }, [navigate, token]);
+  }, [navigate]);
 
   function handleLogin() {
     return new Promise((res) => {
-      setIsAuthed(true);
+      setIsRegistered(true);
       res();
     });
   }
 
   function handleLogout() {
     return new Promise((res) => {
-      setIsAuthed(false);
-      localStorage.removeItem('token');
+      setIsRegistered(false);
       res();
     })
+      .then(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('localEmail');
+      })
       .then(() => {
         navigate('/signin', { replace: true });
       })
@@ -100,25 +106,25 @@ function App() {
 
   function handleInputEmail(e) {
     e.preventDefault();
-    setEmailInput(e.target.value);
+    setEmail(e.target.value);
   }
 
   function handleInputPassword(e) {
     e.preventDefault();
-    setPasswordInput(e.target.value);
+    setPassword(e.target.value);
   }
 
   function handleSubmitLogin(e) {
     e.preventDefault();
-    if (!emailInput || !passwordInput) {
+    if (!email || !password) {
       handleSubmitInfoToolTip();
       return;
     }
     auth
-      .authorize(emailInput, passwordInput)
+      .authorize(email, password)
       .then((data) => {
         if (data.token) {
-          setLoginEmail(emailInput);
+          localStorage.setItem('localEmail', email);
           handleLogin().then(() => {
             navigate('/', { replace: true });
           });
@@ -132,7 +138,7 @@ function App() {
   function handleSubmitRegister(e) {
     e.preventDefault();
     auth
-      .register(emailInput, passwordInput)
+      .register(email, password)
       .then((result) => {
         if (result.data && result.data._id) {
           handleSetRegistration();
@@ -235,9 +241,7 @@ function App() {
   function handleSetRegistration() {
     setIsRegistered(true);
   }
-  // function handleUpdateLoginEmail() {
-  //   setLoginEmail(emailInput);
-  // }
+
   function handleSubmitInfoToolTip() {
     setIsInfoToolTipPopupOpen(true);
   }
@@ -275,15 +279,15 @@ function App() {
           element={
             <Layout
               handleLogout={handleLogout}
-              isAuthed={isAuthed}
-              loginEmail={loginEmail}
+              isRegistered={isRegistered}
+              localEmail={localEmail}
             />
           }
         >
           <Route
             index
             element={
-              <ProtectedRoute isAuthed={isAuthed}>
+              <ProtectedRoute isRegistered={isRegistered}>
                 <Main
                   onEditAvatarClick={handleEditAvatarClick}
                   onEditProfileClick={handleEditProfileClick}
@@ -332,11 +336,11 @@ function App() {
                   handleSubmitInfoToolTip={handleSubmitInfoToolTip}
                   handleSetRegistration={handleSetRegistration}
                   handleSubmitRegister={handleSubmitRegister}
-                  isAuthed={isAuthed}
+                  isRegistered={isRegistered}
                   handleInputEmail={handleInputEmail}
                   handleInputPassword={handleInputPassword}
-                  email={emailInput}
-                  password={passwordInput}
+                  email={email}
+                  password={password}
                 />
                 <InfoToolTip
                   isOpen={isInfoToolTipPopupOpen}
@@ -356,8 +360,8 @@ function App() {
                   handleSubmitInfoToolTip={handleSubmitInfoToolTip}
                   handleInputEmail={handleInputEmail}
                   handleInputPassword={handleInputPassword}
-                  email={emailInput}
-                  password={passwordInput}
+                  email={email}
+                  password={password}
                   handleSubmitLogin={handleSubmitLogin}
                 />
                 <InfoToolTip
