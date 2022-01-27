@@ -70,7 +70,7 @@ function App() {
     document.addEventListener('keydown', closeByEscape);
 
     return () => document.removeEventListener('keydown', closeByEscape);
-  }, [isRegistered, navigate, location]);
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -83,7 +83,7 @@ function App() {
         })
         .catch((err) => console.log(`Error.....: ${err}`));
     }
-  }, [navigate]);
+  }, []);
 
   function handleLogin() {
     return new Promise((res) => {
@@ -100,6 +100,9 @@ function App() {
       .then(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('localEmail');
+      })
+      .then(() => {
+        navigate('/signin', { replace: true });
       })
       .catch((err) => console.log(`Error.....: ${err}`));
   }

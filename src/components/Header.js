@@ -17,6 +17,7 @@ export default function Header({ handleLogout, isRegistered, localEmail }) {
           <Link
             onClick={handleLogout}
             to="/signin"
+            replace
             className="link link__hover"
           >
             Log out
