@@ -13,18 +13,17 @@ export default function Header({ handleLogout, isRegistered, localEmail }) {
 
       <div className="header__user-area">
         <p className="header__email">{localEmail}</p>
-        {isRegistered && (
+        {localEmail && location.pathname === '/' && (
           <Link
-            to="/signin"
             onClick={handleLogout}
-            replace
+            to="/signin"
             className="link link__hover"
           >
             Log out
           </Link>
         )}
         {location.pathname === '/signin' && !isRegistered && (
-          <Link className="link link__hover" to="/signup">
+          <Link className="link link__hover" to="signup">
             Sign up
           </Link>
         )}

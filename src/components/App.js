@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import '../index.css';
 import api from '../utils/api';
@@ -34,7 +34,9 @@ function App() {
   const [password, setPassword] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
   const localEmail = localStorage.getItem('localEmail');
+  // const localPassword = localStorage.getItem('localPassword');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     api
@@ -42,7 +44,7 @@ function App() {
       .then((userData) => {
         setCurrentUser(userData);
       })
-      .catch((err) => console.log(`Error.....: (getUserInfo) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }, []);
 
   useEffect(() => {
@@ -51,13 +53,13 @@ function App() {
       .then((cardData) => {
         setCardList([...cardData]);
       })
-      .catch((err) => console.log(`Error.....: (getInitialCards) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }, []);
 
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
-        if (isRegistered) {
+        if (location.pathname === '/signup' && isRegistered) {
           navigate('/signin', { replace: true });
           closeAllPopups();
         }
@@ -68,15 +70,18 @@ function App() {
     document.addEventListener('keydown', closeByEscape);
 
     return () => document.removeEventListener('keydown', closeByEscape);
-  }, [isRegistered, navigate]);
+  }, [isRegistered, navigate, location]);
 
   useEffect(() => {
     if (token) {
       localStorage.getItem(token);
-      auth.getContent(token).then(() => {
-        setIsRegistered(true);
-        navigate('/', { replace: true });
-      });
+      auth
+        .getContent(token)
+        .then(() => {
+          setIsRegistered(true);
+          navigate('/', { replace: true });
+        })
+        .catch((err) => console.log(`Error.....: ${err}`));
     }
   }, [navigate]);
 
@@ -84,7 +89,7 @@ function App() {
     return new Promise((res) => {
       setIsRegistered(true);
       res();
-    });
+    }).catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleLogout() {
@@ -96,12 +101,7 @@ function App() {
         localStorage.removeItem('token');
         localStorage.removeItem('localEmail');
       })
-      .then(() => {
-        navigate('/signin', { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleInputEmail(e) {
@@ -117,7 +117,6 @@ function App() {
   function handleSubmitLogin(e) {
     e.preventDefault();
     if (!email || !password) {
-      handleSubmitInfoToolTip();
       return;
     }
     auth
@@ -126,12 +125,12 @@ function App() {
         if (data.token) {
           localStorage.setItem('localEmail', email);
           handleLogin().then(() => {
-            navigate('/', { replace: true });
+            navigate('/');
           });
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(`Error.....: ${err}`);
       });
   }
 
@@ -142,19 +141,16 @@ function App() {
       .then((result) => {
         if (result.data && result.data._id) {
           handleSetRegistration();
-          handleSubmitInfoToolTip();
-        } else {
-          handleSubmitInfoToolTip();
         }
       })
       .catch((err) => {
-        handleSubmitInfoToolTip();
-        console.log(err);
-      });
+        console.log(`Error.....: ${err}`);
+      })
+      .finally(handleSubmitInfoToolTip);
   }
 
   function handleCloseSuccessPopup() {
-    navigate('/signin', { replace: true });
+    navigate('/signin');
     closeAllPopups();
   }
 
@@ -168,7 +164,7 @@ function App() {
             state.map((c) => (c._id === card._id ? newCard : c))
           );
         })
-        .catch((err) => console.log(`Error.....: (addLikes) ${err}`));
+        .catch((err) => console.log(`Error.....: ${err}`));
     } else {
       api
         .removeLikes(card._id, isLiked)
@@ -177,7 +173,7 @@ function App() {
             state.map((c) => (c._id === card._id ? newCard : c))
           );
         })
-        .catch((err) => console.log(`Error.....: (removeLikes) ${err}`));
+        .catch((err) => console.log(`Error.....: ${err}`));
     }
   }
 
@@ -188,7 +184,7 @@ function App() {
         const deletedCardID = card._id;
         setCardList(cardList.filter((card) => card._id !== deletedCardID));
       })
-      .catch((err) => console.log(`Error.....: (handleDeleteCard) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleCardClick({ link, name }) {
@@ -209,7 +205,7 @@ function App() {
       .then(() => {
         closeAllPopups();
       })
-      .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleAddPlaceSubmit(data) {
@@ -222,7 +218,7 @@ function App() {
       .then(() => {
         closeAllPopups();
       })
-      .catch((err) => console.log(`Error.....: (handleAddPlaceSubmit) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleUpdateAvatar(data) {
@@ -235,7 +231,7 @@ function App() {
       .then(() => {
         closeAllPopups();
       })
-      .catch((err) => console.log(`Error.....: (handleUpdateUser) ${err}`));
+      .catch((err) => console.log(`Error.....: ${err}`));
   }
 
   function handleSetRegistration() {

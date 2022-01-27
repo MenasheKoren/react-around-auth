@@ -36,7 +36,7 @@ export const InfoToolTip = ({
             </h2>
           </>
         )}
-        {location.pathname === '/signup' && !isRegistered && (
+        {location.pathname === 'signup' && !isRegistered && (
           <>
             <button
               className="popup__close  button button_hover_dark"
